@@ -15,6 +15,10 @@ func HTTPRouteObjectMetaFromOAS(doc *openapi3.T) metav1.ObjectMeta {
 	}
 
 	kuadrantInfoExtension, err := utils.NewKuadrantOASInfoExtension(doc.Info)
+	if kuadrantInfoExtension == nil {
+		return metav1.ObjectMeta{}
+	}
+
 	if err != nil {
 		panic(err)
 	}
@@ -45,6 +49,10 @@ func HTTPRouteGatewayParentRefsFromOAS(doc *openapi3.T) []gatewayapiv1beta1.Pare
 	}
 
 	kuadrantInfoExtension, err := utils.NewKuadrantOASInfoExtension(doc.Info)
+	if kuadrantInfoExtension == nil {
+		return nil
+	}
+
 	if err != nil {
 		panic(err)
 	}
@@ -62,6 +70,10 @@ func HTTPRouteHostnamesFromOAS(doc *openapi3.T) []gatewayapiv1beta1.Hostname {
 	}
 
 	kuadrantInfoExtension, err := utils.NewKuadrantOASInfoExtension(doc.Info)
+	if kuadrantInfoExtension == nil {
+		return nil
+	}
+
 	if err != nil {
 		panic(err)
 	}

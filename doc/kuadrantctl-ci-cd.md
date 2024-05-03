@@ -19,7 +19,7 @@ kubectl create namespace petstore
 
 ## Create a Persistent Volume Claim
 
-To store Tekton build artifacts, create a PVC in the petstore namespace:
+For this guide, to store associated Tekton build artifacts, we'll create a PVC in the `petstore` namespace:
 
 ```bash
 kubectl apply -n petstore -f - <<EOF
@@ -103,7 +103,7 @@ spec:
 EOF
 ```
 
-We're using Tekton here with `kubectl` to apply resources to a cluster. We recommend looking at a tool such as (ArgoCD)[https://argo-cd.readthedocs.io/en/stable/] to implement continuous delivery via a GitOps approach. In this scenario, you would:
+We're using Tekton here with `kubectl` to apply resources to a cluster. We recommend looking at a tool such as [ArgoCD](https://argo-cd.readthedocs.io/en/stable/) to implement continuous delivery via a GitOps approach. In this scenario, you would:
 
 - Use `kuadrantctl` to generate Kubernetes/Kuadrant resources as part a Tekton pipeline
 - Commit these new resources in to a git respository
@@ -111,7 +111,11 @@ We're using Tekton here with `kubectl` to apply resources to a cluster. We recom
 
 ## Create a Kubeconfig Secret
 
-Provide Tekton access to your Kubernetes cluster by creating a secret with your kubeconfig in the `petstore` namespace:
+> **Note:** Important: While this guide uses a kubeconfig secret for simplicity, it is not recommended for production environments. Instead, use a Service Account for enhanced security.
+
+In this guide, we use a `kubeconfig` secret coupled with role bindings to demonstrate how to provide access for pushing generated resources to a cluster. However, for production setups, employing a Service Account is advised.
+
+To proceed, create a kubeconfig secret in the `petstore` namespace to provide Tekton with access to your Kubernetes cluster:
 
 ```bash
 kubectl create secret generic kubeconfig-secret --from-file=kubeconfig=/path/to/.kube/config -n petstore
@@ -178,4 +182,10 @@ EOF
 
 ## Cleanup
 
-To cleanup, remove the `petstore` namespace.
+To cleanup:
+
+- Remove the `petstore` namespace:
+- - `kubectl delete ns petstore`
+- Remove the `ClusterRole` and `ClusterRoleBinding`:
+- - `kubectl delete clusterrole kuadrant-ci-example-full-access`
+- - `kubectl delete clusterrolebinding kuadrant-ci-example-full-access-binding`

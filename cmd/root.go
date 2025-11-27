@@ -52,7 +52,7 @@ func GetRootCmd(args []string) *cobra.Command {
 	rootCmd.AddCommand(generateCommand())
 	rootCmd.AddCommand(topologyCommand())
 
-	if isBinaryAvailable("kubectl-dns") {
+	if isBinaryAvailable("kubectl-kuadrant_dns") {
 		rootCmd.AddCommand(dnsCommand())
 	}
 
